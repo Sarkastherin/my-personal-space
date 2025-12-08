@@ -19,7 +19,7 @@ export default function NuevoGasto() {
 
   return (
     <MainContainer justifyContent="justify-center" alignItems="items-center">
-      <div className="w-md">
+      <div className="max-w-md w-full">
         <MovimientosForm
           type="new"
           tipo_movimiento="gasto"
