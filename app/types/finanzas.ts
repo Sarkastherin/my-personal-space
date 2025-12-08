@@ -3,20 +3,6 @@ export const tipoMovimientosOpt = [
   { label: "Gasto", value: "gasto" },
   { label: "Transferencia", value: "transferencia" },
 ]; 
-export const categoriasOpt = [
-  { label: "🏠 Vivienda", value: "vivienda", tipo: "gasto" },
-  { label: "🧾 Servicios", value: "servicios", tipo: "gasto" },
-  { label: "🚗 Auto", value: "auto", tipo: "gasto" },
-  { label: "💌 Remesas", value: "remesas", tipo: "gasto" },
-  { label: "🛒 Alimentos", value: "alimentos", tipo: "gasto" },
-  { label: "🩺 Salud", value: "salud", tipo: "gasto" },
-  { label: "💸 Deuda", value: "deuda", tipo: "gasto" },
-  { label: "🧘🏻‍♀️ Estilo de vida", value: "estilo de vida", tipo: "gasto" },
-  { label: "🧑‍⚖️ Impuestos", value: "impuestos", tipo: "gasto" },
-  { label: "🔘 Otros", value: "otros", tipo: "gasto" },
-  { label: "💰 Salario", value: "salario", tipo: "ingreso" },
-  { label: "💵 Honorarios", value: "honorarios", tipo: "ingreso" },
-]
 export const formasDePagoOpt = [
   { label: "Efectivo", value: "efectivo" },
   { label: "Tarjeta de crédito", value: "tarjeta_de_credito" },
@@ -28,10 +14,21 @@ export type CommonTypes = {
 }
 export type MovimientosBD = CommonTypes & {
   tipo: (typeof tipoMovimientosOpt)[number]["value"];
-  categoria: (typeof categoriasOpt)[number]["value"];
+  categoria: string
   monto: number;
   concepto: string;
   fecha_movimiento: string;
   forma_de_pago: (typeof formasDePagoOpt)[number]["value"];
   es_reservado: boolean;
+}
+export type PresupuestosBD = CommonTypes & {
+  concepto: string;
+  categoria: string;
+  monto_presupuestado: number;
+  periodo: string; // e.g., "2024-06"
+}
+export type CategoriasBD = CommonTypes & {
+  nombre: string;
+  nombre_con_emoji: string;
+  tipo: (typeof tipoMovimientosOpt)[number]["value"];
 }

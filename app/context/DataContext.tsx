@@ -1,13 +1,17 @@
-import { createContext, useContext, useState, useMemo } from "react";
+import { createContext, useContext, useState } from "react";
 import type { CRUDMethods } from "~/backend/crudFactory";
-import { movimientosService } from "~/backend/services";
-import type { MovimientosBD } from "~/types/finanzas";
+import { movimientosService, presupuestosService, categoriasService } from "~/backend/services";
+import type { MovimientosBD, PresupuestosBD, CategoriasBD } from "~/types/finanzas";
 import { logDetailedError, getFormattedError } from "~/utils/errorMessage";
 import { useUIModals } from "./ModalsContext";
 
 type DataContextType = {
   movimientos: MovimientosBD[] | null;
   getMovimientos: () => Promise<MovimientosBD[]>;
+  presupuestos: PresupuestosBD[] | null;
+  getPresupuestos: () => Promise<PresupuestosBD[]>;
+  categorias: CategoriasBD[] | null;
+  getCategorias: () => Promise<CategoriasBD[]>;
 };
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -15,12 +19,28 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const { showError } = useUIModals();
   const [movimientos, setMovimientos] = useState<MovimientosBD[] | null>(null);
+  const [presupuestos, setPresupuestos] = useState<PresupuestosBD[] | null>(
+    null
+  );
+  const [categorias, setCategorias] = useState<CategoriasBD[] | null>(null);
   const getMovimientos = async () => {
     return getCompleteData<MovimientosBD>({
       api: movimientosService,
       setData: setMovimientos,
     });
   };
+  const getPresupuestos = async () => {
+    return getCompleteData<PresupuestosBD>({
+      api: presupuestosService,
+      setData: setPresupuestos,
+    });
+  };
+  const getCategorias = async () => {
+    return getCompleteData<CategoriasBD>({
+      api: categoriasService,
+      setData: setCategorias,
+    });
+  }
   const getCompleteData = async <T extends Record<string, any>>({
     api,
     setData,
@@ -54,7 +74,9 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     return response.data as T[];
   };
   return (
-    <DataContext.Provider value={{ movimientos, getMovimientos }}>
+    <DataContext.Provider
+      value={{ movimientos, getMovimientos, presupuestos, getPresupuestos, categorias, getCategorias }}
+    >
       {children}
     </DataContext.Provider>
   );
